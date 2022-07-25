@@ -19,6 +19,7 @@ class OzonApi():
         self.api_url = 'https://api-seller.ozon.ru'
         self.headers = {
             'Content-Type': 'application/json',
+            'Accept': 'application/json',
             'Client-Id': f'{client_id}',
             'Api-key': f'{api_key}',
         }
@@ -91,7 +92,7 @@ class OzonApi():
         return response
 
     def request_product_description(self, product_id:int):
-        """Returns a dictionary containing product description.
+        """Returns response with a dictionary containing product description.
         """
         _url = f'{self.api_url}/v1/product/info/description'
         _data = {

@@ -16,7 +16,7 @@ PORT= ''
 USER= ''
 PASSWORD= ''
 
-def run(parser):
+def run_parser(parser:OzonProductParcer):
     _id = parser.client_id
 
     try:
@@ -61,6 +61,6 @@ if __name__ == "__main__":
         ))
 
     with ThreadPoolExecutor(4) as executor:
-        executor.map(run, parsers)
+        executor.map(run_parser, parsers)
     
     logger.info(f'Script completed')

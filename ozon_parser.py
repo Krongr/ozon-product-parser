@@ -150,7 +150,7 @@ class OzonProductParcer(OzonApi):
                                 _item['dictionary_value_id'],
                                 _attribute['complex_id'],
                             )
-                            queries.append(_query)                            
+                            queries.append(_query)
 
                 elif _key not in ('id', 'last_id'):
                     _query = self.create_attribute_query(
@@ -158,6 +158,7 @@ class OzonProductParcer(OzonApi):
                         _key,
                         _value,
                     )
+                    queries.append(_query)
             except (
                 TypeError,
                 KeyError,
@@ -166,5 +167,5 @@ class OzonProductParcer(OzonApi):
                 logger.exception('Product card parsing error')
             except Exception:
                 logger.exception('Unexpected error')
-            finally:
-                return queries
+
+        return queries
