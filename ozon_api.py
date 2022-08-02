@@ -11,7 +11,10 @@ class ConnectionError(APIError):
 
 class BadResponse(APIError):
     def __init__(self, response):
-        super().__init__(f'{response.json()}')
+        try:
+            super().__init__(f'{response.json()}')
+        except requests.exceptions.JSONDecodeError:
+            super().__init__(f'{response.content}')
 
 
 class OzonApi():
