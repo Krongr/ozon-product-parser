@@ -8,14 +8,16 @@ class DbClient():
         )
         self.engine = create_engine(self.db)
 
-    def get_credentials(self, mp_id)->list:
+    def get_credentials(self)->list:
         credentials = []
         with self.engine.connect() as connection:
             try:
                 response = connection.execute(f"""
-                    SELECT client_id_api, api_key
-                    FROM account_list 
-                    WHERE mp_id = {mp_id};
+                    SELECT DISTINCT client_id_api, api_key
+                    FROM account_list  
+                    WHERE mp_id = 1 AND
+                        client_id_api IS NOT NULL AND
+                        client_id_api != '';
                 """).fetchall()
                 for _item in response:
                     credentials.append({

@@ -1,7 +1,7 @@
 from sqlalchemy import exc
 
 import app_logger
-from ozon_api import OzonApi, APIError, BadResponse
+from ozon_api import OzonApi, ConnectionError, BadResponse
 
 
 logger = app_logger.create_logger(__name__)
@@ -31,7 +31,7 @@ class OzonProductParcer(OzonApi):
                     break
         except BadResponse:
             logger.exception('API method error')
-        except APIError:
+        except ConnectionError:
             logger.exception('Connection error')
         except (
             TypeError,
@@ -51,7 +51,7 @@ class OzonProductParcer(OzonApi):
             description = response.json()['result']['description']
         except BadResponse:
             logger.exception('API method error')
-        except APIError:
+        except ConnectionError:
             logger.exception('Connection error')
         except (
             TypeError,
@@ -78,7 +78,7 @@ class OzonProductParcer(OzonApi):
                 product_cards.append(_entry)
         except BadResponse:
             logger.exception('API method error')
-        except APIError:
+        except ConnectionError:
             logger.exception('Connection error')
         except (
             TypeError,

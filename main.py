@@ -10,7 +10,7 @@ logger = app_logger.create_logger(__name__)
 
 # DB settings:
 TYPE= ''
-NAME= ''
+DB_NAME= ''
 HOST= ''
 PORT= ''
 USER= ''
@@ -21,34 +21,29 @@ def run_parser(parser:OzonProductParcer):
 
     try:
         product_ids = parser.collect_product_ids()
-        logger.info(f'Product IDs collected ({_id})')
         for i in range(0, len(product_ids), 50):
             _queries = []
             product_cards = parser.collect_product_cards(product_ids[i:i+50])
-            logger.info(f'Product cards ({i}-{i+50}) collected ({_id})')
 
             for _card in product_cards:
                 _attribute_queries = parser.create_product_card_queries(_card)
                 _queries += _attribute_queries
-            logger.info(f'Queries creation completed ({_id})')
-
             parser.db_client.execute_queries(_queries)
-            logger.info(f'Queries execution completed ({_id})')
-
             parser.db_client.remove_duplicates('product_attr', 'db_i')
-            logger.info(f'Duplicates removed ({_id})')
+            logger.info(f'Product cards ({i}-{i+50}) commited ({_id})')
+        logger.info(f'({_id}) finished') 
     except exc.SQLAlchemyError:
         logger.exception(f'DB communication error ({_id})')
     except Exception:
-        logger.exception(f'Unexpected error ({_id})')
+        logger.exception(f'Unexpected error ({_id})')   
 
 
 if __name__ == "__main__":
     logger.info(f'Script started')
-    db_client = DbClient(TYPE, NAME, HOST, PORT, USER, PASSWORD)
+    db_client = DbClient(TYPE, DB_NAME, HOST, PORT, USER, PASSWORD)
 
     try:
-        credentials = db_client.get_credentials(mp_id=1)
+        credentials = db_client.get_credentials()
     except exc.SQLAlchemyError:
         logger.exception('Getting credentials failed')
 
